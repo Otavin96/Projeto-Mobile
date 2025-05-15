@@ -1,10 +1,19 @@
-import { Router } from 'express'
+import { Router } from "express";
+import { UserController } from "../controllers/UserController";
 
-
-const routes = Router()
+const routes = Router();
+const userController = new UserController();
 
 routes.get("/", async (req, res) => {
-    res.send("Hello Word")
-})
+  res.send("Hello Word");
+});
 
-export default routes
+routes.post("/users/", async (req, res) => {
+  userController.create(req, res);
+});
+
+routes.get("/users/", async (req, res) => {
+  userController.index(req, res);
+});
+
+export default routes;
