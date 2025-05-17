@@ -17,7 +17,7 @@ export default function Dashboard() {
 
   useEffect(() => {
     const getUser = async () => {
-      const response = await api.get("users/");
+      const response = await api.get("users/")
 
       setUsers(response.data);
     };

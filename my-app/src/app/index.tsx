@@ -35,6 +35,7 @@ export default function Index() {
           </Text>
         ))}
         <Button title="Proximo" onPress={() => router.navigate("/dashboard")} />
+        <Button title="Cadastrar Usuário" onPress={() => router.navigate("../Users/insertUser")} />
       </View>
     </View>
   );
