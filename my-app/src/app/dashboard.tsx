@@ -1,4 +1,6 @@
 import { Text, View, StyleSheet, ScrollView } from "react-native";
+import { useQuery } from "@tanstack/react-query"
+
 import { router } from "expo-router";
 import { Button } from "@/components/button";
 import { api } from "@/api/api";
@@ -13,30 +15,32 @@ type UserResponse = {
 };
 
 export default function Dashboard() {
-  const [users, setUsers] = useState<UserResponse[]>([]);
 
-  useEffect(() => {
-    const getUser = async () => {
-      const response = await api.get("users/")
+  const { data: users } = useQuery({
+    queryKey: ['users'],
+    queryFn: async () => {
+      const response = await api.get("/users")
 
-      setUsers(response.data);
-    };
-
-    getUser();
-  }, []);
+      return response.data
+    }
+  })
 
   return (
     <ScrollView style={Styles.container}>
-      <Text style={Styles.title}>Dashboard</Text>
+      <View style={Styles.card}>
+        <Text style={Styles.title}>Lista de Usuários</Text>
 
-      <Button title="Voltar" onPress={() => router.navigate("/")} />
-
-      {users.map((user, index) => (
-        <View>
-          <Text key={user.id}>Name: {user.name}</Text>
-          <Text key={user.id}>Email: {user.email}</Text>
+      
+        {users.map((user: UserResponse, index: number) => (
+        <View style={Styles.listUser} key={user.id}>
+          <Text>Nome: {user.name}</Text>
+          <Text>Email: {user.email}</Text>
         </View>
-      ))}
+        ))}
+      
+
+        <Button title="Voltar" onPress={() => router.navigate("/")} />
+      </View>
     </ScrollView>
   );
 }
@@ -46,7 +50,6 @@ export const Styles = StyleSheet.create({
     flex: 1,
     padding: 32,
     backgroundColor: "#FFF",
-    gap: 30,
   },
 
   title: {
@@ -55,4 +58,12 @@ export const Styles = StyleSheet.create({
     fontWeight: "bold",
     textAlign: "center",
   },
+
+  card: {
+    gap: 10
+  },
+
+  listUser: {
+    gap: 1
+  }
 });

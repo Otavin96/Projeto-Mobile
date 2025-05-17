@@ -1,4 +1,5 @@
 import { Text, View } from "react-native";
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useState } from "react";
 import { Styles } from "./styles";
 
@@ -6,6 +7,8 @@ import { router } from "expo-router";
 
 import { Button } from "@/components/button";
 import { Input } from "@/components/input";
+
+const queryClient = new QueryClient();
 
 export default function Index() {
   const [task, setTask] = useState<string>("");
@@ -19,6 +22,7 @@ export default function Index() {
   }
 
   return (
+    <QueryClientProvider client={queryClient}>
     <View style={Styles.container}>
       <View style={Styles.formTask}>
         <Text style={Styles.title}>Lista de Tarefas</Text>
@@ -27,16 +31,17 @@ export default function Index() {
       </View>
 
       <View style={Styles.listTask}>
-        <Text style={Styles.title}>Minhas Tarefas</Text>
+        <Text style={Styles.title}>Usuários</Text>
 
         {listTask.map((item, index) => (
           <Text style={Styles.task} key={index}>
             {`Tarefa ${index + 1}`}:{item}
           </Text>
         ))}
-        <Button title="Proximo" onPress={() => router.navigate("/dashboard")} />
         <Button title="Cadastrar Usuário" onPress={() => router.navigate("../Users/insertUser")} />
+        <Button title="Lista de Usuários" onPress={() => router.navigate("/dashboard")} />
       </View>
     </View>
+    </QueryClientProvider>
   );
 }
